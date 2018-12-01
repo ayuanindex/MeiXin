@@ -16,6 +16,10 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<!--activity-->
+		<activity
+			android:name=".ClassNameListActivity"
+			android:launchMode="singleTask"></activity><!--菜品展示列表-->
 	</application>
 
 </manifest>

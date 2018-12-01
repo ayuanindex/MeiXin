@@ -6,8 +6,14 @@
 	android:orientation="vertical">
 
 	<TextView
+		android:id="@+id/tv_class_name"
 		style="@style/TitleStyle"
 		android:text="菜品类名" />
+
+	<ListView
+		android:id="@+id/lv_menu_item"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"></ListView>
 
 
 </LinearLayout>

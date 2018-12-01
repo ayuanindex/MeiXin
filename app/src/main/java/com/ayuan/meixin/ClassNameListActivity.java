@@ -49,7 +49,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		@Override
 		public int getCount() {
-			return 10;
+			return 20;
 		}
 
 		@Override
@@ -74,7 +74,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 			TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
 
 			tv_name.setText(classname + ":" + typeid);
-			iv_logo.setImageResource(R.mipmap.ic_launcher_round);
+			iv_logo.setImageResource(R.drawable.logo);
 			return view;
 		}
 	}

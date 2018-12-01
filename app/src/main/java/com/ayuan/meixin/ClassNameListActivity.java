@@ -1,13 +1,11 @@
 package com.ayuan.meixin;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +14,8 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
+	private String classname;
+	private int typeid;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 	private void initUI() {
 		//取得从上一个页面传过来的参数(用于数据获取和标题显示)
-		String typeid = getIntent().getStringExtra("typeid");
-		String classname = getIntent().getStringExtra("classname");
+		typeid = getIntent().getIntExtra("typeid", 0);
+		classname = getIntent().getStringExtra("classname");
 
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
 		lv_menu_item = (ListView) findViewById(R.id.lv_menu_item);
@@ -71,6 +71,9 @@ public class ClassNameListActivity extends AppCompatActivity {
 				view = convertView;
 			}
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
+			TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
+
+			tv_name.setText(classname + ":" + typeid);
 			iv_logo.setImageResource(R.mipmap.ic_launcher_round);
 			return view;
 		}

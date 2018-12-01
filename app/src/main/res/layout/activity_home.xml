@@ -11,10 +11,9 @@
 
 	<ImageView
 		android:layout_width="match_parent"
-		android:layout_height="225dp"
+		android:layout_height="200dp"
 		android:layout_marginTop="3dp"
-		android:background="@drawable/Image" />
-
+		android:background="@mipmap/image" />
 
 	<GridView
 		android:id="@+id/gv_class"

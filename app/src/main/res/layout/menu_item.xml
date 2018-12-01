@@ -9,7 +9,8 @@
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_centerVertical="true"
-		android:src="@mipmap/ic_launcher_round" />
+		android:background="@drawable/logo_bg"
+		android:src="@drawable/logo" />
 
 	<TextView
 		android:id="@+id/tv_name"

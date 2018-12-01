@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#ffffff"
+	android:orientation="vertical">
+
+	<TextView
+		style="@style/TitleStyle"
+		android:text="美心菜谱" />
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="100dp"
+		android:layout_marginTop="3dp"
+		android:background="@android:drawable/btn_default" />
+
+
+	<GridView
+		android:id="@+id/gv_class"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:numColumns="2"
+		android:padding="5dp"
+		android:verticalSpacing="5dp">
+
+	</GridView>
+
+</LinearLayout>

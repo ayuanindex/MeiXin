@@ -1,7 +1,10 @@
 package com.ayuan.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
 	private GridView gv_class;
 	private List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-	private List<Vegetableinfo> vegetableinfoList = null;
+	private ConnectivityManager connectivityManager;
+	private NetworkInfo activeNetworkInfo;
+	private List<Vegetableinfo> vegetableinfoList;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 				case 0:
 					MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter();
 					gv_class.setAdapter(myGridViewAdapter);
-					if (vegetableinfoList.isEmpty()) {
+					if (vegetableinfoList == null) {
 						Toast.makeText(MainActivity.this, "获取数据不成功", Toast.LENGTH_SHORT).show();
 					}
 					break;
@@ -51,14 +56,27 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_home);
 
 		initUI();
-		initData();
+		intitNetWork();
+	}
+
+	//网络状态检测
+	private void intitNetWork() {
+		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivityManager != null) {
+			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+			if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+				//当前网络可用
+				if (activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+					initData();
+				}
+			}
+		}
 	}
 
 	/**
 	 * 从网络中访问数据
 	 */
 	private void initData() {
-		vegetableinfoList.clear();
 		new Thread() {
 			@Override
 			public void run() {
@@ -69,6 +87,27 @@ public class MainActivity extends AppCompatActivity {
 				mHandler.sendMessage(message);
 			}
 		}.start();
+
+		initListener();
+	}
+
+	private void initListener() {
+		if (gv_class != null) {
+			gv_class.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					//将id和分类名称传入到下一个页面
+					Intent intent = new Intent(MainActivity.this, ClassNameListActivity.class);
+					if (vegetableinfoList != null) {
+						String typeid = vegetableinfoList.get(position).getTypeid();
+						String typename = vegetableinfoList.get(position).getTypename();
+						intent.putExtra("typeid", typeid);
+						intent.putExtra("typename", typename);
+					}
+					startActivity(intent);
+				}
+			});
+		}
 	}
 
 	private void initUI() {
@@ -76,27 +115,13 @@ public class MainActivity extends AppCompatActivity {
 
 		gv_class = (GridView) findViewById(R.id.gv_class);
 
-		gv_class.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//将id和分类名称传入到下一个页面
-				Intent intent = new Intent(MainActivity.this, ClassNameListActivity.class);
-				if (!vegetableinfoList.isEmpty()) {
-					String typeid = vegetableinfoList.get(position).getTypeid();
-					String typename = vegetableinfoList.get(position).getTypename();
-					intent.putExtra("typeid", typeid);
-					intent.putExtra("typename", typename);
-				}
-				startActivity(intent);
-			}
-		});
 	}
 
 	private class MyGridViewAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
-			if (vegetableinfoList.isEmpty()) {
+			if (vegetableinfoList == null) {
 				return 10;
 			}
 			return vegetableinfoList.size();
@@ -122,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 			TextView tv_des = (TextView) view.findViewById(R.id.tv_des);
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
-			if (vegetableinfoList.isEmpty()) {
+			if (vegetableinfoList == null) {
 				/*tv_des.setText("产品类名");
 				iv_logo.setImageResource(R.drawable.gridview_logo);*/
 				return view;

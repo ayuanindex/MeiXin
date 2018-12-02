@@ -10,7 +10,7 @@
 		android:layout_height="50dp"
 		android:layout_centerVertical="true"
 		android:background="@drawable/logo_bg"
-		android:src="@drawable/logo" />
+		android:src="@drawable/logo2" />
 
 	<TextView
 		android:id="@+id/tv_name"

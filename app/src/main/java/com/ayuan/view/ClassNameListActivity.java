@@ -63,12 +63,15 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
 		lv_menu_item = (ListView) findViewById(R.id.lv_menu_item);
+
 		lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(getApplicationContext(), DishesInfosActivity.class);
-				intent.putExtra("menuid", getmenus.get(position).getMenuid());
-				intent.putExtra("menuname", getmenus.get(position).getMenuname());
+				if (getmenus != null) {
+					intent.putExtra("menuid", getmenus.get(position).getMenuid());
+					intent.putExtra("menuname", getmenus.get(position).getMenuname());
+				}
 				startActivity(intent);
 			}
 		});
@@ -79,7 +82,10 @@ public class ClassNameListActivity extends AppCompatActivity {
 	 */
 	private void initData() {
 		getmenus.clear();
-		final Request_menu request_menu = new Request_menu(1, 1, 5);
+		if (typeid == 0) {
+			return;
+		}
+		final Request_menu request_menu = new Request_menu(typeid, 1, 5);
 		new Thread() {
 			@Override
 			public void run() {
@@ -96,7 +102,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		@Override
 		public int getCount() {
-			if (getmenus.isEmpty()) {
+			if (typeid == 0) {
 				return 10;
 			}
 			return getmenus.size();
@@ -121,7 +127,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 				view = convertView;
 			}
 
-			if (getmenus.isEmpty()) {
+			if (typeid == 0) {
 				return view;
 			}
 

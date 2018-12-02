@@ -11,10 +11,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
 	private String[] strings = new String[]{"123", "234", "76", "dfh", "afg", "sdfg", "hjkd", "sfg", "tyu", "ert", "ert", "wetr"};
 	private GridView gv_class;
+	private List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 
 
 	@Override
@@ -23,6 +28,14 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_home);
 
 		initUI();
+		initData();
+	}
+
+	/**
+	 * 从网络中访问数据
+	 */
+	private void initData() {
+
 	}
 
 	private void initUI() {

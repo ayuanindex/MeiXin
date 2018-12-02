@@ -5,15 +5,22 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ayuan.vo.DishesBean;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClassNameListActivity extends AppCompatActivity {
 
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
+	private List<DishesBean> dishesBeanList = new ArrayList<DishesBean>();
 	private String classname;
 	private int typeid;
 
@@ -30,6 +37,8 @@ public class ClassNameListActivity extends AppCompatActivity {
 	 * 从网络上获取数据，放到数据库中，图片加载到
 	 */
 	private void initData() {
+		//从网络上获取的菜谱数据通过JavaBean封装到集合中
+
 	}
 
 	private void initUI() {
@@ -43,6 +52,12 @@ public class ClassNameListActivity extends AppCompatActivity {
 		MyMenuItemAdapter myMenuItemAdapter = new MyMenuItemAdapter();//创建数据适配器对象
 		lv_menu_item.setAdapter(myMenuItemAdapter);
 		tv_class_name.setText(classname);
+		lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+			}
+		});
 	}
 
 	private class MyMenuItemAdapter extends BaseAdapter {

@@ -11,16 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ayuan.vo.DishesBean;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class ClassNameListActivity extends AppCompatActivity {
 
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
-	private List<DishesBean> dishesBeanList = new ArrayList<DishesBean>();
 	private String classname;
 	private int typeid;
 

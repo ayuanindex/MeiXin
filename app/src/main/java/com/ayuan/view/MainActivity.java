@@ -25,10 +25,9 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-	private String[] strings = new String[]{"123", "234", "76", "dfh", "afg", "sdfg", "hjkd", "sfg", "tyu", "ert", "ert", "wetr"};
 	private GridView gv_class;
 	private List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
-	private List<Vegetableinfo> vegetableinfoList;
+	private List<Vegetableinfo> vegetableinfoList = null;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -38,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 				case 0:
 					MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter();
 					gv_class.setAdapter(myGridViewAdapter);
+					if (vegetableinfoList.isEmpty()) {
+						Toast.makeText(MainActivity.this, "获取数据不成功", Toast.LENGTH_SHORT).show();
+					}
 					break;
 			}
 		}
@@ -56,18 +58,22 @@ public class MainActivity extends AppCompatActivity {
 	 * 从网络中访问数据
 	 */
 	private void initData() {
-		vegetableinfoList = Http_Vegetable.getVegetable();
-
-		if (vegetableinfoList.isEmpty()) {
-			Toast.makeText(this, "获取服务器数据不成功", Toast.LENGTH_SHORT).show();
-		}
-		Message message = Message.obtain();
-		message.what = 0;
-		mHandler.sendMessage(message);
-
+		vegetableinfoList.clear();
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+				vegetableinfoList = Http_Vegetable.getVegetable();
+				Message message = Message.obtain();
+				message.what = 0;
+				mHandler.sendMessage(message);
+			}
+		}.start();
 	}
 
 	private void initUI() {
+		vegetableinfoList = new ArrayList<Vegetableinfo>();
+
 		gv_class = (GridView) findViewById(R.id.gv_class);
 
 		gv_class.setOnItemClickListener(new AdapterView.OnItemClickListener() {

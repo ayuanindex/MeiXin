@@ -1,5 +1,7 @@
 package com.ayuan.utils;
 
+import android.util.Log;
+
 import com.ayuan.vo.Menuinfo;
 import com.ayuan.vo.Request_menu;
 
@@ -21,6 +23,7 @@ public class Http_Menus {
 	private static HttpURLConnection connection;
 	private static InputStream is;
 	private static ByteArrayOutputStream baos;
+	private static String TAG = "Http_Menus";
 
 	public static List<Menuinfo> getmenus(Request_menu request) {
 		URL url;
@@ -35,7 +38,7 @@ public class Http_Menus {
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
 			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append("typecid=").append(request.getTypeid()).append("&").append("startid=").append(request.getStartid()).append("&").append("pagesize=").append(request.getPagesize());
+			stringBuffer.append("typeid=").append(request.getTypeid()).append("&").append("startid=").append(request.getStartid()).append("&").append("pagesize=").append(request.getPagesize());
 			byte[] bytes = stringBuffer.toString().getBytes();
 			connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
 			OutputStream outputStream = connection.getOutputStream();
@@ -50,7 +53,7 @@ public class Http_Menus {
 				}
 				baos.flush();
 				String str = baos.toString();
-				System.out.println(str);
+				Log.i(TAG, "菜单:" + str);
 				JSONObject jsonObject = new JSONObject(str);
 				JSONArray menus = jsonObject.getJSONArray("menus");
 				for (int i = 0; i < menus.length(); i++) {

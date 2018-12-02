@@ -29,6 +29,12 @@
 		<activity
 			android:name="com.ayuan.view.ClassNameListActivity"
 			android:launchMode="singleTask"></activity><!--菜品展示列表-->
+		<activity
+			android:name=".DishesInfosActivity"
+			android:launchMode="singleTask"></activity><!--菜品详情页-->
+		<activity
+			android:name=".CommentPageActivity"
+			android:launchMode="singleTask"></activity><!--评论展示-->
 	</application>
 
 </manifest>

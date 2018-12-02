@@ -12,7 +12,7 @@
 		android:layout_height="150dp"
 		android:layout_centerHorizontal="true"
 		android:layout_marginTop="8dp"
-		android:src="@mipmap/gridview_logo" />
+		android:src="@drawable/gridview_logo" />
 
 	<TextView
 		android:id="@+id/tv_des"

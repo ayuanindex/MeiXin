@@ -1,6 +1,10 @@
 package com.ayuan.meixin;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,14 +13,36 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.ayuan.tool.GetDrawable;
+import com.ayuan.tool.Http_Menus;
+import com.ayuan.vo.Menuinfo;
+import com.ayuan.vo.Request_menu;
+
+import java.util.List;
 
 public class ClassNameListActivity extends AppCompatActivity {
 
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
-	private String classname;
+	private String typename;
 	private int typeid;
+	private List<Menuinfo> getmenus;
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			int what = msg.what;
+			switch (what) {
+				case 0:
+					MyMenuItemAdapter myMenuItemAdapter = new MyMenuItemAdapter();
+					lv_menu_item.setAdapter(myMenuItemAdapter);
+					break;
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,48 +53,52 @@ public class ClassNameListActivity extends AppCompatActivity {
 		initData();
 	}
 
-	/**
-	 * 从网络上获取数据，放到数据库中，图片加载到
-	 */
-	private void initData() {
-		//从网络上获取的菜谱数据通过JavaBean封装到集合中
-
-	}
 
 	private void initUI() {
 		//取得从上一个页面传过来的参数(用于数据获取和标题显示)
 		typeid = getIntent().getIntExtra("typeid", 0);
-		classname = getIntent().getStringExtra("classname");
+		typename = getIntent().getStringExtra("typename");
 
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
 		lv_menu_item = (ListView) findViewById(R.id.lv_menu_item);
 
-		MyMenuItemAdapter myMenuItemAdapter = new MyMenuItemAdapter();//创建数据适配器对象
-		lv_menu_item.setAdapter(myMenuItemAdapter);
-		tv_class_name.setText(classname);
 		lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				Intent intent = new Intent();
+				intent.putExtra("menuid", getmenus.get(position).getMenuid());
+				intent.putExtra("menuname", getmenus.get(position).getMenuname());
+				startActivity(intent);
 			}
 		});
+	}
+
+	/**
+	 * 从网络上获取数据，放到数据库中，图片加载到
+	 */
+	private void initData() {
+		Request_menu request_menu = new Request_menu(typeid, 1, 20);
+		getmenus = Http_Menus.getmenus(request_menu);
+		Message message = Message.obtain();
+		message.what = 0;
+		mHandler.sendMessage(message);
 	}
 
 	private class MyMenuItemAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
-			return 20;
+			return getmenus.size();
 		}
 
 		@Override
-		public Object getItem(int position) {
-			return null;
+		public Menuinfo getItem(int position) {
+			return getmenus.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			return 0;
+			return position;
 		}
 
 		@Override
@@ -81,9 +111,20 @@ public class ClassNameListActivity extends AppCompatActivity {
 			}
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
 			TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
+			RatingBar rb_pinfen = (RatingBar) view.findViewById(R.id.rb_pinfen);
 
-			tv_name.setText(classname + ":" + typeid);
-			iv_logo.setImageResource(R.drawable.logo);
+			int likes = Integer.parseInt(getItem(position).getLikes());
+			int notLikes = Integer.parseInt(getItem(position).getNotlikes());
+			int i = (likes + notLikes) / likes;
+			rb_pinfen.setRating(i);
+
+			GetDrawable getDrawable = new GetDrawable();
+			String spic = getItem(position).getSpic();
+			Drawable getdrawable = getDrawable.getdrawable(spic, ClassNameListActivity.this);
+			iv_logo.setImageDrawable(getdrawable);
+
+			String menuname = getItem(position).getMenuname();
+			tv_name.setText(menuname);
 			return view;
 		}
 	}

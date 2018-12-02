@@ -1,6 +1,6 @@
 package com.ayuan.vo;
 
-public class comment {
+public class Comment {
 	private String menuid;
 	private String region;
 	private String ptime;
@@ -15,7 +15,7 @@ public class comment {
 	private String time;
 	private String day;
 
-	public comment(String menuid, String region, String ptime, String date, String hours, String seconds, String month, String nanos, String timezoneOffset, String year, String minutes, String time, String day) {
+	public Comment(String menuid, String region, String ptime, String date, String hours, String seconds, String month, String nanos, String timezoneOffset, String year, String minutes, String time, String day) {
 		this.menuid = menuid;
 		this.region = region;
 		this.ptime = ptime;
@@ -31,7 +31,7 @@ public class comment {
 		this.day = day;
 	}
 
-	public comment() {
+	public Comment() {
 	}
 
 	public String getMenuid() {

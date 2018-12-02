@@ -1,6 +1,6 @@
 package com.ayuan.tool;
 
-import com.ayuan.vo.vegetableinfo;
+import com.ayuan.vo.Vegetableinfo;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,17 +14,19 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 首页菜品分类的网络请求
+ */
 public class Http_Vegetable {
-	private static List<vegetableinfo> vegetablelist = new ArrayList<>();
+	private static List<Vegetableinfo> vegetablelist = new ArrayList<>();
 	private static HttpURLConnection connection;
 	private static InputStream is;
 	private static ByteArrayOutputStream baos;
 
-	public static List<vegetableinfo> getVegetable() {
+	public static List<Vegetableinfo> getVegetable() {
 		URL url;
 		try {
-			url = new URL(values.Http_Vegetable);
+			url = new URL(Values.Http_Vegetable);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setReadTimeout(5000);
 			connection.setConnectTimeout(5000);
@@ -51,7 +53,7 @@ public class Http_Vegetable {
 					String description = type.getString("description");
 					String typeid = type.getString("typeid");
 					String typename = type.getString("typename");
-					vegetableinfo vegetableinfo = new vegetableinfo(typepic, description, typeid, typename);
+					Vegetableinfo vegetableinfo = new Vegetableinfo(typepic, description, typeid, typename);
 					vegetablelist.add(vegetableinfo);
 				}
 				System.out.println(vegetablelist.size());

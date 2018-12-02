@@ -1,15 +1,15 @@
 package com.ayuan.vo;
 
-public class vegetableinfo {
-	private String typepic;
-	private String description;
-	private String typeid;
-	private String typename;
+public class Vegetableinfo {
+	private String typepic;//图片路径
+	private String description;//描述
+	private String typeid;//序列id
+	private String typename;//名字
 
-	public vegetableinfo() {
+	public Vegetableinfo() {
 	}
 
-	public vegetableinfo(String typepic, String description, String typeid, String typename) {
+	public Vegetableinfo(String typepic, String description, String typeid, String typename) {
 		this.typepic = typepic;
 		this.description = description;
 		this.typeid = typeid;

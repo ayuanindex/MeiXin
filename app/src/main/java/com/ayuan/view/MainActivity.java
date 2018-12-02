@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 	private List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
 	private ConnectivityManager connectivityManager;
 	private NetworkInfo activeNetworkInfo;
+	private String TAG = "MainActivity";
 	private List<Vegetableinfo> vegetableinfoList;
 	private Handler mHandler = new Handler() {
 		@Override
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 					//将id和分类名称传入到下一个页面
 					Intent intent = new Intent(MainActivity.this, ClassNameListActivity.class);
 					if (vegetableinfoList != null) {
+						Log.i(TAG, "集合:" + vegetableinfoList.toString());
 						String typeid = vegetableinfoList.get(position).getTypeid();
 						String typename = vegetableinfoList.get(position).getTypename();
 						intent.putExtra("typeid", typeid);

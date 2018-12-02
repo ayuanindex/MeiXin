@@ -1,7 +1,5 @@
 package com.ayuan.utils;
 
-import android.util.Log;
-
 import com.ayuan.vo.Vegetableinfo;
 
 import org.json.JSONArray;
@@ -47,7 +45,6 @@ public class Http_Vegetable {
 				}
 				baos.flush();
 				String str = baos.toString();
-				Log.i(TAG, "流:" + str);
 				JSONObject jsonObject = new JSONObject(str);
 				JSONArray types = jsonObject.getJSONArray("types");
 				vegetablelist = new ArrayList<Vegetableinfo>();

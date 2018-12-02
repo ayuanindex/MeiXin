@@ -29,7 +29,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
 	private String typename;
-	private int typeid;
+	private String typeid;
 	private List<Menuinfo> getmenus = null;
 	private Handler mHandler = new Handler() {
 		@Override
@@ -44,6 +44,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 			}
 		}
 	};
+	private Request_menu request_menu;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 	private void initUI() {
 		getmenus = new ArrayList<Menuinfo>();
 		//取得从上一个页面传过来的参数(用于数据获取和标题显示)
-		typeid = getIntent().getIntExtra("typeid", 0);
+		typeid = getIntent().getStringExtra("typeid");
 		typename = getIntent().getStringExtra("typename");
 
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
@@ -82,10 +83,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 	 */
 	private void initData() {
 		getmenus.clear();
-		if (typeid == 0) {
-			return;
-		}
-		final Request_menu request_menu = new Request_menu(typeid, 1, 5);
+		request_menu = new Request_menu(Integer.parseInt(typeid), 1, 8);
 		new Thread() {
 			@Override
 			public void run() {
@@ -102,7 +100,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		@Override
 		public int getCount() {
-			if (typeid == 0) {
+			if (typeid == null) {
 				return 10;
 			}
 			return getmenus.size();
@@ -127,7 +125,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 				view = convertView;
 			}
 
-			if (typeid == 0) {
+			if (typeid == null) {
 				return view;
 			}
 

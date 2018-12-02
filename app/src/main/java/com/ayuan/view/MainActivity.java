@@ -1,4 +1,4 @@
-package com.ayuan.meixin;
+package com.ayuan.view;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -15,9 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ayuan.tool.GetDrawable;
-import com.ayuan.tool.Http_Vegetable;
-import com.ayuan.vo.Request_menu;
+import com.ayuan.utils.GetDrawable;
+import com.ayuan.utils.Http_Vegetable;
 import com.ayuan.vo.Vegetableinfo;
 
 import java.util.ArrayList;

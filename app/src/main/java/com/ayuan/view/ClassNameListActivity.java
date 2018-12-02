@@ -1,6 +1,5 @@
-package com.ayuan.meixin;
+package com.ayuan.view;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,8 +15,8 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.ayuan.tool.GetDrawable;
-import com.ayuan.tool.Http_Menus;
+import com.ayuan.utils.GetDrawable;
+import com.ayuan.utils.Http_Menus;
 import com.ayuan.vo.Menuinfo;
 import com.ayuan.vo.Request_menu;
 
@@ -65,10 +64,10 @@ public class ClassNameListActivity extends AppCompatActivity {
 		lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent();
+				/*Intent intent = new Intent(getApplicationContext(), );
 				intent.putExtra("menuid", getmenus.get(position).getMenuid());
 				intent.putExtra("menuname", getmenus.get(position).getMenuname());
-				startActivity(intent);
+				startActivity(intent);*/
 			}
 		});
 	}
@@ -88,6 +87,9 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		@Override
 		public int getCount() {
+			if (getmenus.isEmpty()) {
+				return 10;
+			}
 			return getmenus.size();
 		}
 
@@ -109,6 +111,11 @@ public class ClassNameListActivity extends AppCompatActivity {
 			} else {
 				view = convertView;
 			}
+
+			if (getmenus.isEmpty()) {
+				return view;
+			}
+
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
 			TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
 			RatingBar rb_pinfen = (RatingBar) view.findViewById(R.id.rb_pinfen);

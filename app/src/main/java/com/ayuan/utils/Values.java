@@ -1,4 +1,4 @@
-package com.ayuan.tool;
+package com.ayuan.utils;
 
 public class Values {
 	/**

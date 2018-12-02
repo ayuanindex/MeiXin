@@ -1,4 +1,4 @@
-package com.ayuan.meixin;
+package com.ayuan.view;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

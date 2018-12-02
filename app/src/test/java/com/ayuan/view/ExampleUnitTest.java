@@ -1,4 +1,4 @@
-package com.ayuan.meixin;
+package com.ayuan.view;
 
 import org.junit.Test;
 

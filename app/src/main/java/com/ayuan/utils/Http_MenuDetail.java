@@ -1,6 +1,7 @@
-package com.ayuan.tool;
+package com.ayuan.utils;
 
-import com.ayuan.vo.Comment;
+import com.ayuan.vo.MenuDetail;
+import com.ayuan.vo.Step;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,19 +16,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 获取评论
- */
-public class Http_Comments {
-	private static List<Comment> commentList = new ArrayList<Comment>();
+public class Http_MenuDetail {
+	private static List<Step> stepList = new ArrayList<Step>();
 	private static HttpURLConnection connection;
 	private static InputStream is;
 	private static ByteArrayOutputStream baos;
+	private static MenuDetail menuDetail = null;
 
-	public static List<Comment> getcomments(int menuid) {
+	public static MenuDetail getmenus(int mid) {
 		URL url;
 		try {
-			url = new URL(Values.Http_comments);
+			url = new URL(Values.Http_menuDetail);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setReadTimeout(5000);
 			connection.setConnectTimeout(5000);
@@ -37,7 +36,7 @@ public class Http_Comments {
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
 			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append("menuid=").append(menuid);
+			stringBuffer.append("menuid=").append(mid);
 			byte[] bytes = stringBuffer.toString().getBytes();
 			connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
 			OutputStream outputStream = connection.getOutputStream();
@@ -54,26 +53,28 @@ public class Http_Comments {
 				String str = baos.toString();
 				System.out.println(str);
 				JSONObject jsonObject = new JSONObject(str);
-				JSONArray menus = jsonObject.getJSONArray("comments");
-				for (int i = 0; i < menus.length(); i++) {
-					JSONObject menu = menus.getJSONObject(i);
-					String mid = menu.getString("menuid");
-					String region = menu.getString("region");
-					String ptime = menu.getString("ptime");
-					String date = menu.getString("date");
-					String hours = menu.getString("hours");
-					String seconds = menu.getString("seconds");
-					String month = menu.getString("month");
-					String nanos = menu.getString("nanos");
-					String timezoneOffset = menu.getString("timezoneOffset");
-					String year = menu.getString("year");
-					String minutes = menu.getString("minutes");
-					String time = menu.getString("time");
-					String day = menu.getString("day");
-					// Menuinfo Menuinfo=new Menuinfo(spic,assistmaterial,notlikes,menuname,abstracts,mainmaterial,menuid,typeid,likes);
-					Comment Comment = new Comment(mid, region, ptime, date, hours, seconds, month, nanos, timezoneOffset, year, minutes, time, day);
-					commentList.add(Comment);
+				JSONObject menu = jsonObject.getJSONObject("menu");
+				String spic = menu.getString("spic");
+				String assistmaterial = menu.getString("assistmaterial");
+				String notlikes = menu.getString("notlikes");
+				String menuname = menu.getString("menuname");
+				String abstracts = menu.getString("abstracts");
+				String mainmaterial = menu.getString("mainmaterial");
+				String menuid = menu.getString("menuid");
+				String typeid = menu.getString("typeid");
+				String likes = menu.getString("likes");
+				JSONArray steps = jsonObject.getJSONArray("steps");
+				for (int i = 0; i < steps.length(); i++) {
+					JSONObject step = steps.getJSONObject(i);
+					String stepid = step.getString("stepid");
+					String description = step.getString("description");
+					String menuid1 = step.getString("menuid");
+					String pic = step.getString("pic");
+					//Menuinfo Menuinfo=new Menuinfo(spic,assistmaterial,notlikes,menuname,abstracts,mainmaterial,menuid,typeid,likes);
+					Step step1 = new Step(stepid, description, menuid1, pic);
+					stepList.add(step1);
 				}
+				menuDetail = new MenuDetail(spic, assistmaterial, notlikes, menuname, abstracts, mainmaterial, menuid, typeid, likes, stepList);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -90,7 +91,7 @@ public class Http_Comments {
 					e.printStackTrace();
 				}
 			}
-			return commentList;
+			return menuDetail;
 		}
 	}
 }

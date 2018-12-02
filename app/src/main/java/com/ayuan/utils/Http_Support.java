@@ -1,39 +1,44 @@
-package com.ayuan.tool;
+package com.ayuan.utils;
 
-import com.ayuan.vo.Vegetableinfo;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * 首页菜品分类的网络请求
+ * 页面三喜欢和不喜欢的提交
+ *
+ * @author ayuan
  */
-public class Http_Vegetable {
-	private static List<Vegetableinfo> vegetablelist = new ArrayList<>();
+public class Http_Support {
+	private static String result = "err";
 	private static HttpURLConnection connection;
 	private static InputStream is;
 	private static ByteArrayOutputStream baos;
 
-	public static List<Vegetableinfo> getVegetable() {
+	public static String support(int menuid, String yes) {
 		URL url;
 		try {
-			url = new URL(Values.Http_Vegetable);
+			url = new URL(Values.Http_support);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setReadTimeout(5000);
 			connection.setConnectTimeout(5000);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("charset", "utf-8");
+			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
+			connection.setUseCaches(false);
+			StringBuffer stringBuffer = new StringBuffer();
+			stringBuffer.append("menuid:").append(menuid).append(",like:").append(yes);
+			byte[] bytes = stringBuffer.toString().getBytes();
+			connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
+			OutputStream outputStream = connection.getOutputStream();
+			outputStream.write(bytes);
 			if (connection.getResponseCode() == 200) {
 				is = connection.getInputStream();
 				baos = new ByteArrayOutputStream();
@@ -46,17 +51,7 @@ public class Http_Vegetable {
 				String str = baos.toString();
 				System.out.println(str);
 				JSONObject jsonObject = new JSONObject(str);
-				JSONArray types = jsonObject.getJSONArray("types");
-				for (int i = 0; i < types.length(); i++) {
-					JSONObject type = types.getJSONObject(i);
-					String typepic = type.getString("typepic");
-					String description = type.getString("description");
-					String typeid = type.getString("typeid");
-					String typename = type.getString("typename");
-					Vegetableinfo vegetableinfo = new Vegetableinfo(typepic, description, typeid, typename);
-					vegetablelist.add(vegetableinfo);
-				}
-				System.out.println(vegetablelist.size());
+				result = jsonObject.getString("result");
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -73,7 +68,8 @@ public class Http_Vegetable {
 					e.printStackTrace();
 				}
 			}
-			return vegetablelist;
+			return result;
 		}
 	}
+
 }

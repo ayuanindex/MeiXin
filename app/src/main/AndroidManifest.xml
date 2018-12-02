@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.ayuan.meixin">
+	package="com.ayuan.view">
 
 	<!--拨打电话的权限-->
 	<uses-permission android:name="android.permission.CALL_PHONE" />
@@ -18,7 +18,7 @@
 		android:roundIcon="@mipmap/lauch_logo"
 		android:supportsRtl="true"
 		android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-		<activity android:name=".MainActivity">
+		<activity android:name="com.ayuan.view.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +27,7 @@
 		</activity>
 		<!--activity-->
 		<activity
-			android:name=".ClassNameListActivity"
+			android:name="com.ayuan.view.ClassNameListActivity"
 			android:launchMode="singleTask"></activity><!--菜品展示列表-->
 	</application>
 

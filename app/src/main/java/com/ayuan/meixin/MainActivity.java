@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 				//将id和分类名称传入到下一个页面
 				Intent intent = new Intent(MainActivity.this, ClassNameListActivity.class);
 				intent.putExtra("typeid", position);//将类编号传给下一页进行处理
-				intent.putExtra("classname", myGridViewAdapter.getItem(position));
+				intent.putExtra("classname" , myGridViewAdapter.getItem(position));
 				startActivity(intent);
 			}
 		});

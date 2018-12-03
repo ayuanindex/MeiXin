@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -58,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
 	private SQLiteDatabase readableDatabase;
 	private Recipedao recipedao;
 
-	/**
-	 * 将数据加载到数据库
-	 */
-	private void initDB() {
-		RecipeOpenhelp recipeOpenhelp = new RecipeOpenhelp(this);
-		readableDatabase = recipeOpenhelp.getReadableDatabase();
-
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_home);
 
 		initUI();
+
+		connectionJudgment();
+	}
+
+	private void connectionJudgment() {
 		boolean netWorkAvailable = InternetUtils.isNetWorkAvailable(this);
 		if (netWorkAvailable) {
 			initData();
@@ -83,6 +81,15 @@ public class MainActivity extends AppCompatActivity {
 			message.what = 0;
 			mHandler.sendMessage(message);
 		}
+	}
+
+	/**
+	 * 将数据加载到数据库
+	 */
+	private void initDB() {
+		RecipeOpenhelp recipeOpenhelp = new RecipeOpenhelp(this);
+		readableDatabase = recipeOpenhelp.getReadableDatabase();
+
 	}
 
 	/**
@@ -115,9 +122,19 @@ public class MainActivity extends AppCompatActivity {
 						intent.putExtra("typeid", typeid);
 						intent.putExtra("typename", typename);
 					}
-					startActivity(intent);
+					startActivityForResult(intent, 1);
 				}
 			});
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+			case 1:
+				initData();
+				break;
 		}
 	}
 
@@ -126,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 		vegetableinfoList = new ArrayList<Vegetableinfo>();
 
 		gv_class = (GridView) findViewById(R.id.gv_class);
-
 		initListener();
 	}
 

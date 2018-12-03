@@ -169,4 +169,10 @@ public class ClassNameListActivity extends AppCompatActivity {
 			return view;
 		}
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		setResult(1);
+	}
 }

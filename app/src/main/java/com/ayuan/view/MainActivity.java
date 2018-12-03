@@ -2,6 +2,7 @@ package com.ayuan.view;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -199,6 +200,10 @@ public class MainActivity extends AppCompatActivity {
 		private boolean insertData(int position) {
 			if (recipedao != null) {
 				//单独将图片文件写道缓存里
+				GetDrawable getDrawable = new GetDrawable();
+				Drawable getdrawable = getDrawable.getdrawable(getItem(position).getTypepic(), MainActivity.this);
+				Bitmap bitmap = getDrawable.drawableToBitmap(getdrawable);
+				getDrawable.saveBitmap(bitmap, getItem(position).getTypeid(), Bitmap.CompressFormat.PNG);
 				boolean b = recipedao.innest_type(vegetableinfoList.get(position));
 				return b;
 			}

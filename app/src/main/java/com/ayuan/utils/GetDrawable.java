@@ -52,7 +52,7 @@ public class GetDrawable {
 	 * @param path     传入的文件网络地址
 	 * @param context
 	 * @param drawable
-	 */
+	 *//*
 	public void getBitmap(final String path, final Context context, final BitmapDrawable drawable) {
 		imgurl = Values.Http + path;
 		url = null;
@@ -79,5 +79,39 @@ public class GetDrawable {
 				}
 			}
 		}.start();
+	}
+*/
+	/**
+	 * 将Drawable转化为Bitmap
+	 *
+	 * @param drawable
+	 * @return
+	 */
+	public Bitmap drawableToBitmap(Drawable drawable) {
+		if (drawable == null)
+			return null;
+		return ((BitmapDrawable) drawable).getBitmap();
+	}
+
+	/**
+	 * 将Bitmap以指定格式保存到指定路径
+	 *
+	 * @param bitmap
+	 * @param name
+	 */
+	public void saveBitmap(Bitmap bitmap, String name, Bitmap.CompressFormat format) {
+		// 创建一个位于SD卡上的文件
+		File file = new File(Environment.getExternalStorageDirectory(),
+				name);
+		FileOutputStream out = null;
+		try {
+			// 打开指定文件输出流
+			out = new FileOutputStream(file);
+			// 将位图输出到指定文件
+			bitmap.compress(format, 100, out);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

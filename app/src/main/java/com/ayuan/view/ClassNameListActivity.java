@@ -16,8 +16,10 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.ayuan.db.Recipedao;
 import com.ayuan.utils.GetDrawable;
 import com.ayuan.utils.Http_Menus;
+import com.ayuan.utils.InternetUtils;
 import com.ayuan.vo.Menuinfo;
 import com.ayuan.vo.Request_menu;
 
@@ -26,6 +28,7 @@ import java.util.List;
 
 public class ClassNameListActivity extends AppCompatActivity {
 
+	private static final String TAG = "ClassNameListActivity";
 	private TextView tv_class_name;
 	private ListView lv_menu_item;
 	private String typename;
@@ -52,7 +55,15 @@ public class ClassNameListActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_class);
 
 		initUI();
-		initData();
+
+		boolean netWorkAvailable = InternetUtils.isNetWorkAvailable(this);
+		if (netWorkAvailable) {
+			initData();
+		} else {
+			//从数据里面获取数据
+			Recipedao recipedao = new Recipedao(this);
+			recipedao.issavetypes();
+		}
 	}
 
 
@@ -65,17 +76,25 @@ public class ClassNameListActivity extends AppCompatActivity {
 		tv_class_name = (TextView) findViewById(R.id.tv_class_name);
 		lv_menu_item = (ListView) findViewById(R.id.lv_menu_item);
 
-		lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(getApplicationContext(), DishesInfosActivity.class);
-				if (getmenus != null) {
-					intent.putExtra("menuid", getmenus.get(position).getMenuid());
-					intent.putExtra("menuname", getmenus.get(position).getMenuname());
+		tv_class_name.setText(typename);
+
+		initListener();
+	}
+
+	private void initListener() {
+		if (lv_menu_item != null) {
+			lv_menu_item.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Intent intent = new Intent(getApplicationContext(), DishesInfosActivity.class);
+					if (getmenus != null) {
+						intent.putExtra("menuid", getmenus.get(position).getMenuid());
+						intent.putExtra("menuname", getmenus.get(position).getMenuname());
+					}
+					startActivity(intent);
 				}
-				startActivity(intent);
-			}
-		});
+			});
+		}
 	}
 
 	/**
@@ -83,24 +102,26 @@ public class ClassNameListActivity extends AppCompatActivity {
 	 */
 	private void initData() {
 		getmenus.clear();
-		request_menu = new Request_menu(Integer.parseInt(typeid), 1, 8);
-		new Thread() {
-			@Override
-			public void run() {
-				super.run();
-				getmenus = Http_Menus.getmenus(request_menu);
-				Message message = Message.obtain();
-				message.what = 1;
-				mHandler.sendMessage(message);
-			}
-		}.start();
+		if (typeid != null) {
+			request_menu = new Request_menu(Integer.parseInt(typeid), 1, 8);
+			new Thread() {
+				@Override
+				public void run() {
+					super.run();
+					getmenus = Http_Menus.getmenus(request_menu);
+					Message message = Message.obtain();
+					message.what = 1;
+					mHandler.sendMessage(message);
+				}
+			}.start();
+		}
 	}
 
 	private class MyMenuItemAdapter extends BaseAdapter {
 
 		@Override
 		public int getCount() {
-			if (typeid == null) {
+			if (getmenus == null) {
 				return 10;
 			}
 			return getmenus.size();
@@ -125,7 +146,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 				view = convertView;
 			}
 
-			if (typeid == null) {
+			if (getmenus == null) {
 				return view;
 			}
 
@@ -136,7 +157,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 			int likes = Integer.parseInt(getItem(position).getLikes());
 			int notLikes = Integer.parseInt(getItem(position).getNotlikes());
 			int i = (likes + notLikes) / likes;
-			rb_pinfen.setRating(i);
+			rb_pinfen.setRating(i + 1);
 
 			GetDrawable getDrawable = new GetDrawable();
 			String spic = getItem(position).getSpic();

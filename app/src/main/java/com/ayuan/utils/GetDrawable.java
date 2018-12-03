@@ -1,6 +1,7 @@
 package com.ayuan.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import java.io.IOException;
@@ -8,9 +9,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * 获取网络图片对象
- */
+//获取网络图片对象
 public class GetDrawable {
 	Drawable drawable;
 	private URL url;
@@ -42,5 +41,17 @@ public class GetDrawable {
 			e.printStackTrace();
 		}
 		return drawable;
+	}
+
+	public Bitmap getBitmap(String path, Context context) {
+		imgurl = Values.Http + path;
+		url = null;
+		new Thread() {
+			@Override
+			public void run() {
+				super.run();
+			}
+		}.start();
+		return null;
 	}
 }

@@ -4,6 +4,7 @@ import com.ayuan.vo.MenuDetail;
 import com.ayuan.vo.Step;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -16,12 +17,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 3.获取菜谱详情
+ */
 public class Http_MenuDetail {
 	private static List<Step> stepList = new ArrayList<Step>();
 	private static HttpURLConnection connection;
 	private static InputStream is;
 	private static ByteArrayOutputStream baos;
 	private static MenuDetail menuDetail = null;
+	private static String param;
 
 	public static MenuDetail getmenus(int mid) {
 		URL url;
@@ -35,12 +40,19 @@ public class Http_MenuDetail {
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
-			StringBuffer stringBuffer = new StringBuffer();
-			stringBuffer.append("menuid=").append(mid);
-			byte[] bytes = stringBuffer.toString().getBytes();
+			JSONObject object = new JSONObject();
+			try {
+				object.put("menuid", mid);
+				param = object.toString();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			//  System.out.println(param);
+			byte[] bytes = param.getBytes();
 			connection.setRequestProperty("Content-Length", String.valueOf(bytes.length));
 			OutputStream outputStream = connection.getOutputStream();
 			outputStream.write(bytes);
+
 			if (connection.getResponseCode() == 200) {
 				is = connection.getInputStream();
 				baos = new ByteArrayOutputStream();
@@ -51,7 +63,7 @@ public class Http_MenuDetail {
 				}
 				baos.flush();
 				String str = baos.toString();
-				System.out.println(str);
+				// System.out.println(str);
 				JSONObject jsonObject = new JSONObject(str);
 				JSONObject menu = jsonObject.getJSONObject("menu");
 				String spic = menu.getString("spic");

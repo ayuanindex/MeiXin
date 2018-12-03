@@ -1,140 +1,149 @@
 package com.ayuan.vo;
 
 public class Comment {
-	private String menuid;
-	private String region;
-	private String ptime;
-	private String date;
-	private String hours;
-	private String seconds;
-	private String month;
-	private String nanos;
-	private String timezoneOffset;
-	private String year;
-	private String minutes;
-	private String time;
-	private String day;
+    private String menuid;
+    private String region;
+    private String date;
+    private String hours;
+    private String seconds;
+    private String month;
+    private String nanos;
+    private String timezoneOffset;
+    private String year;
+    private String minutes;
+    private String time;
+    private String day;
+    private String content;
+    private int cid;
 
-	public Comment(String menuid, String region, String ptime, String date, String hours, String seconds, String month, String nanos, String timezoneOffset, String year, String minutes, String time, String day) {
-		this.menuid = menuid;
-		this.region = region;
-		this.ptime = ptime;
-		this.date = date;
-		this.hours = hours;
-		this.seconds = seconds;
-		this.month = month;
-		this.nanos = nanos;
-		this.timezoneOffset = timezoneOffset;
-		this.year = year;
-		this.minutes = minutes;
-		this.time = time;
-		this.day = day;
-	}
+    public Comment(String menuid, String region, String date, String hours, String seconds, String month, String nanos, String timezoneOffset, String year, String minutes, String time, String day, String content, int cid) {
+        this.menuid = menuid;
+        this.region = region;
+        this.date = date;
+        this.hours = hours;
+        this.seconds = seconds;
+        this.month = month;
+        this.nanos = nanos;
+        this.timezoneOffset = timezoneOffset;
+        this.year = year;
+        this.minutes = minutes;
+        this.time = time;
+        this.day = day;
+        this.content = content;
+        this.cid = cid;
+    }
+    public Comment() {
+    }
 
-	public Comment() {
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getMenuid() {
-		return menuid;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setMenuid(String menuid) {
-		this.menuid = menuid;
-	}
+    public int getCid() {
+        return cid;
+    }
 
-	public String getRegion() {
-		return region;
-	}
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
 
-	public void setRegion(String region) {
-		this.region = region;
-	}
+    public String getMenuid() {
+        return menuid;
+    }
 
-	public String getPtime() {
-		return ptime;
-	}
+    public void setMenuid(String menuid) {
+        this.menuid = menuid;
+    }
 
-	public void setPtime(String ptime) {
-		this.ptime = ptime;
-	}
+    public String getRegion() {
+        return region;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public String getHours() {
-		return hours;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public void setHours(String hours) {
-		this.hours = hours;
-	}
+    public String getHours() {
+        return hours;
+    }
 
-	public String getSeconds() {
-		return seconds;
-	}
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
 
-	public void setSeconds(String seconds) {
-		this.seconds = seconds;
-	}
+    public String getSeconds() {
+        return seconds;
+    }
 
-	public String getMonth() {
-		return month;
-	}
+    public void setSeconds(String seconds) {
+        this.seconds = seconds;
+    }
 
-	public void setMonth(String month) {
-		this.month = month;
-	}
+    public String getMonth() {
+        return month;
+    }
 
-	public String getNanos() {
-		return nanos;
-	}
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
-	public void setNanos(String nanos) {
-		this.nanos = nanos;
-	}
+    public String getNanos() {
+        return nanos;
+    }
 
-	public String getTimezoneOffset() {
-		return timezoneOffset;
-	}
+    public void setNanos(String nanos) {
+        this.nanos = nanos;
+    }
 
-	public void setTimezoneOffset(String timezoneOffset) {
-		this.timezoneOffset = timezoneOffset;
-	}
+    public String getTimezoneOffset() {
+        return timezoneOffset;
+    }
 
-	public String getYear() {
-		return year;
-	}
+    public void setTimezoneOffset(String timezoneOffset) {
+        this.timezoneOffset = timezoneOffset;
+    }
 
-	public void setYear(String year) {
-		this.year = year;
-	}
+    public String getYear() {
+        return year;
+    }
 
-	public String getMinutes() {
-		return minutes;
-	}
+    public void setYear(String year) {
+        this.year = year;
+    }
 
-	public void setMinutes(String minutes) {
-		this.minutes = minutes;
-	}
+    public String getMinutes() {
+        return minutes;
+    }
 
-	public String getTime() {
-		return time;
-	}
+    public void setMinutes(String minutes) {
+        this.minutes = minutes;
+    }
 
-	public void setTime(String time) {
-		this.time = time;
-	}
+    public String getTime() {
+        return time;
+    }
 
-	public String getDay() {
-		return day;
-	}
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-	public void setDay(String day) {
-		this.day = day;
-	}
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
 }

@@ -1,7 +1,7 @@
 package com.ayuan.view;
 
-import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,8 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ayuan.db.RecipeOpenhelp;
+import com.ayuan.db.Recipedao;
 import com.ayuan.utils.GetDrawable;
 import com.ayuan.utils.Http_Vegetable;
+import com.ayuan.utils.InternetUtils;
 import com.ayuan.vo.Vegetableinfo;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 				case 0:
 					MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter();
 					gv_class.setAdapter(myGridViewAdapter);
+					initDB();
 					if (vegetableinfoList == null) {
 						Toast.makeText(MainActivity.this, "获取数据不成功", Toast.LENGTH_SHORT).show();
 					}
@@ -51,6 +55,17 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 	};
+	private SQLiteDatabase readableDatabase;
+	private Recipedao recipedao;
+
+	/**
+	 * 将数据加载到数据库
+	 */
+	private void initDB() {
+		RecipeOpenhelp recipeOpenhelp = new RecipeOpenhelp(this);
+		readableDatabase = recipeOpenhelp.getReadableDatabase();
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +73,15 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_home);
 
 		initUI();
-		intitNetWork();
-	}
-
-	//网络状态检测
-	private void intitNetWork() {
-		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectivityManager != null) {
-			NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-			if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-				//当前网络可用
-				if (activeNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-					initData();
-				}
-			}
+		boolean netWorkAvailable = InternetUtils.isNetWorkAvailable(this);
+		if (netWorkAvailable) {
+			initData();
+		} else {
+			Toast.makeText(this, "亲，您的网络没有连接哦", Toast.LENGTH_SHORT).show();
+			vegetableinfoList = inDatabase();
+			Message message = Message.obtain();
+			message.what = 0;
+			mHandler.sendMessage(message);
 		}
 	}
 
@@ -89,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 				mHandler.sendMessage(message);
 			}
 		}.start();
-
-		initListener();
 	}
 
 	private void initListener() {
@@ -114,10 +122,12 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void initUI() {
+		recipedao = new Recipedao(this);
 		vegetableinfoList = new ArrayList<Vegetableinfo>();
 
 		gv_class = (GridView) findViewById(R.id.gv_class);
 
+		initListener();
 	}
 
 	private class MyGridViewAdapter extends BaseAdapter {
@@ -151,10 +161,10 @@ public class MainActivity extends AppCompatActivity {
 			TextView tv_des = (TextView) view.findViewById(R.id.tv_des);
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
 			if (vegetableinfoList == null) {
-				/*tv_des.setText("产品类名");
-				iv_logo.setImageResource(R.drawable.gridview_logo);*/
+				//从数据库中获取数据来显示页面
 				return view;
 			}
+			insertData(position);
 
 			String typename = getItem(position).getTypename();
 			tv_des.setText(typename);
@@ -164,6 +174,30 @@ public class MainActivity extends AppCompatActivity {
 			Drawable logo = GetDrawable.getdrawable(typepic, MainActivity.this);
 			iv_logo.setImageDrawable(logo);
 			return view;
+		}
+
+		private boolean insertData(int position) {
+			if (recipedao != null) {
+				//单独将图片文件写道缓存里
+
+				boolean b = recipedao.innest_type(vegetableinfoList.get(position));
+				return b;
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * 在没有网络的情况下，使用数据库里面的数据进行数据展示
+	 */
+	private List<Vegetableinfo> inDatabase() {
+		if (recipedao != null) {
+			List<Vegetableinfo> vegetableinfos = recipedao.select_types();
+			return vegetableinfos;
+		} else {
+			recipedao = new Recipedao(this);
+			List<Vegetableinfo> vegetableinfos = recipedao.select_types();
+			return vegetableinfos;
 		}
 	}
 }

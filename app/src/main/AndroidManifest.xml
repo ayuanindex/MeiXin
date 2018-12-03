@@ -34,7 +34,8 @@
 			android:launchMode="singleTask"></activity><!--菜品详情页-->
 		<activity
 			android:name=".CommentPageActivity"
-			android:launchMode="singleTask"></activity><!--评论展示-->
+			android:launchMode="singleTask"
+			android:windowSoftInputMode="stateHidden|adjustPan" /><!--评论展示-->
 	</application>
 
 </manifest>

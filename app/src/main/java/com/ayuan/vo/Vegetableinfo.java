@@ -47,4 +47,14 @@ public class Vegetableinfo {
 	public void setTypename(String typename) {
 		this.typename = typename;
 	}
+
+	@Override
+	public String toString() {
+		return "Vegetableinfo{" +
+				"typepic='" + typepic + '\'' +
+				", description='" + description + '\'' +
+				", typeid='" + typeid + '\'' +
+				", typename='" + typename + '\'' +
+				'}';
+	}
 }

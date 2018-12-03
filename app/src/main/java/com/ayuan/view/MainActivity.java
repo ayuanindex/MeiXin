@@ -172,14 +172,17 @@ public class MainActivity extends AppCompatActivity {
 			String typepic = getItem(position).getTypepic();
 			GetDrawable GetDrawable = new GetDrawable();
 			Drawable logo = GetDrawable.getdrawable(typepic, MainActivity.this);
-			iv_logo.setImageDrawable(logo);
+			if (logo != null) {
+				iv_logo.setImageDrawable(logo);
+			} else {
+				iv_logo.setImageResource(R.drawable.image_haha);
+			}
 			return view;
 		}
 
 		private boolean insertData(int position) {
 			if (recipedao != null) {
 				//单独将图片文件写道缓存里
-
 				boolean b = recipedao.innest_type(vegetableinfoList.get(position));
 				return b;
 			}

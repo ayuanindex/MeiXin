@@ -2,8 +2,13 @@ package com.ayuan.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -43,15 +48,36 @@ public class GetDrawable {
 		return drawable;
 	}
 
-	public Bitmap getBitmap(String path, Context context) {
+	/**
+	 * @param path     传入的文件网络地址
+	 * @param context
+	 * @param drawable
+	 */
+	public void getBitmap(final String path, final Context context, final BitmapDrawable drawable) {
 		imgurl = Values.Http + path;
 		url = null;
 		new Thread() {
 			@Override
 			public void run() {
 				super.run();
+				Bitmap bitmap = drawable.getBitmap();
+				File file = new File(Environment.getDownloadCacheDirectory().getPath(), path + ".png");
+				FileOutputStream fileOutputStream = null;
+				try {
+					fileOutputStream = new FileOutputStream(file);
+					bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} finally {
+					if (fileOutputStream != null) {
+						try {
+							fileOutputStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		}.start();
-		return null;
 	}
 }

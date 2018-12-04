@@ -1,9 +1,10 @@
 package com.ayuan.view;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 	private ConnectivityManager connectivityManager;
 	private NetworkInfo activeNetworkInfo;
 	private String TAG = "MainActivity";
+	private boolean flag = false;
 	private List<Vegetableinfo> vegetableinfoList;
 	private Handler mHandler = new Handler() {
 		@Override
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 				case 0:
 					MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter();
 					gv_class.setAdapter(myGridViewAdapter);
+					flag = true;
 					initDB();
 					if (vegetableinfoList == null) {
 						Toast.makeText(MainActivity.this, "获取数据不成功", Toast.LENGTH_SHORT).show();
@@ -59,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 	};
 	private SQLiteDatabase readableDatabase;
 	private Recipedao recipedao;
+	private ImageView iv_setting;
+	private ImageView iv_img;
 
 
 	@Override
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private void connectionJudgment() {
 		boolean netWorkAvailable = InternetUtils.isNetWorkAvailable(this);
-		if (netWorkAvailable) {
+		if (netWorkAvailable && flag) {
 			initData();
 		} else {
 			Toast.makeText(this, "亲，您的网络没有连接哦", Toast.LENGTH_SHORT).show();
@@ -90,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 	private void initDB() {
 		RecipeOpenhelp recipeOpenhelp = new RecipeOpenhelp(this);
 		readableDatabase = recipeOpenhelp.getReadableDatabase();
-
 	}
 
 	/**
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 		}.start();
 	}
 
+	@SuppressLint("NewApi")
 	private void initListener() {
 		if (gv_class != null) {
 			gv_class.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,6 +134,15 @@ public class MainActivity extends AppCompatActivity {
 				}
 			});
 		}
+
+		if (iv_img != null) {
+			iv_img.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+				}
+			});
+		}
 	}
 
 	@Override
@@ -134,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
 			case 1:
-				initData();
+				connectionJudgment();
 				break;
 		}
 	}
@@ -144,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 		vegetableinfoList = new ArrayList<Vegetableinfo>();
 
 		gv_class = (GridView) findViewById(R.id.gv_class);
+		iv_img = (ImageView) findViewById(R.id.iv_img);
 		initListener();
 	}
 
@@ -179,6 +196,8 @@ public class MainActivity extends AppCompatActivity {
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
 			if (vegetableinfoList == null) {
 				//从数据库中获取数据来显示页面
+				Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.loding);
+				view.startAnimation(animation);
 				return view;
 			}
 			insertData(position);
@@ -187,23 +206,22 @@ public class MainActivity extends AppCompatActivity {
 			tv_des.setText(typename);
 
 			String typepic = getItem(position).getTypepic();
-			GetDrawable GetDrawable = new GetDrawable();
-			Drawable logo = GetDrawable.getdrawable(typepic, MainActivity.this);
+			/*Drawable logo = GetDrawable.getdrawable(typepic, MainActivity.this);*/
+			Bitmap logo = GetDrawable.getBitmap(typepic, MainActivity.this);
 			if (logo != null) {
-				iv_logo.setImageDrawable(logo);
+				iv_logo.setImageBitmap(logo);
 			} else {
 				iv_logo.setImageResource(R.drawable.image_haha);
 			}
+			Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.loding);
+			view.startAnimation(animation);
 			return view;
 		}
+
 
 		private boolean insertData(int position) {
 			if (recipedao != null) {
 				//单独将图片文件写道缓存里
-				GetDrawable getDrawable = new GetDrawable();
-				Drawable getdrawable = getDrawable.getdrawable(getItem(position).getTypepic(), MainActivity.this);
-				Bitmap bitmap = getDrawable.drawableToBitmap(getdrawable);
-				getDrawable.saveBitmap(bitmap, getItem(position).getTypeid(), Bitmap.CompressFormat.PNG);
 				boolean b = recipedao.innest_type(vegetableinfoList.get(position));
 				return b;
 			}

@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -103,7 +105,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 	private void initData() {
 		getmenus.clear();
 		if (typeid != null) {
-			request_menu = new Request_menu(Integer.parseInt(typeid), 1, 8);
+			request_menu = new Request_menu(Integer.parseInt(typeid), 1, 15);
 			new Thread() {
 				@Override
 				public void run() {
@@ -139,7 +141,7 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view;
+			final View view;
 			if (convertView == null) {
 				view = View.inflate(ClassNameListActivity.this, R.layout.menu_item, null);
 			} else {
@@ -149,7 +151,9 @@ public class ClassNameListActivity extends AppCompatActivity {
 			if (getmenus == null) {
 				return view;
 			}
-
+			if (position == getmenus.size()) {
+				initData();
+			}
 			ImageView iv_logo = (ImageView) view.findViewById(R.id.iv_logo);
 			TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
 			RatingBar rb_pinfen = (RatingBar) view.findViewById(R.id.rb_pinfen);
@@ -166,6 +170,8 @@ public class ClassNameListActivity extends AppCompatActivity {
 
 			String menuname = getItem(position).getMenuname();
 			tv_name.setText(menuname);
+			Animation animation = AnimationUtils.loadAnimation(ClassNameListActivity.this, R.anim.loding);
+			view.startAnimation(animation);
 			return view;
 		}
 	}

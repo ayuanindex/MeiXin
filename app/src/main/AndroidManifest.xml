@@ -17,7 +17,7 @@
 		android:label="@string/app_name"
 		android:roundIcon="@drawable/logo"
 		android:supportsRtl="true"
-		android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+		android:theme="@style/AppTheme">
 		<activity android:name="com.ayuan.view.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -36,6 +36,7 @@
 			android:name=".CommentPageActivity"
 			android:launchMode="singleTask"
 			android:windowSoftInputMode="stateHidden|adjustPan" /><!--评论展示-->
+		<activity android:name=".AboutActivity"></activity>
 	</application>
 
 </manifest>

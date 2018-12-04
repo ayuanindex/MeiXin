@@ -10,6 +10,7 @@
 		android:text="美心菜谱" />
 
 	<ImageView
+		android:id="@+id/iv_img"
 		android:layout_width="match_parent"
 		android:layout_height="190dp"
 		android:background="@mipmap/image"
